@@ -1,0 +1,30 @@
+{% extends 'myapp/base.html' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Todos</h1>
+    <a class="btn btn-primary" href="{% url 'myapp:todo_create' %}">Create Todo</a>
+  </div>
+
+  {% if todos %}
+    <div class="list-group">
+      {% for todo in todos %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="mb-1">{% if todo.resolved %}<s>{{ todo.title }}</s>{% else %}{{ todo.title }}{% endif %}</h5>
+            <small class="text-muted">Due: {{ todo.due_date|date:"SHORT_DATETIME_FORMAT" }}</small>
+            <p class="mb-1">{{ todo.description }}</p>
+          </div>
+          <div class="btn-group">
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'myapp:todo_edit' todo.pk %}">Edit</a>
+            <a class="btn btn-sm btn-outline-danger" href="{% url 'myapp:todo_delete' todo.pk %}">Delete</a>
+            <a class="btn btn-sm btn-outline-success" href="{% url 'myapp:todo_toggle' todo.pk %}">{% if todo.resolved %}Unresolve{% else %}Resolve{% endif %}</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No todos yet. Create one to get started.</p>
+  {% endif %}
+
+{% endblock %}
